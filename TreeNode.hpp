@@ -9,18 +9,20 @@
 class TreeNode
 {
 public:
-    explicit TreeNode(std::string name, std::optional<std::vector<std::unique_ptr<TreeNode>>> children = std::nullopt, std::optional<TreeNode&> parent = std::nullopt, uint32_t dist = 0);
+    explicit TreeNode(std::string name, std::shared_ptr<TreeNode> parent = nullptr, uint32_t dist = 0);
     virtual ~TreeNode() = default;
+
+    static std::shared_ptr<TreeNode> make_with_children(std::string name, std::vector<std::unique_ptr<TreeNode>>&& children, std::shared_ptr<TreeNode> parent = nullptr, uint32_t dist = 0);
 
     std::string to_string() const;
 
-    void set_parent(TreeNode& parent, uint32_t dist);
-    void set_children(std::vector<std::unique_ptr<TreeNode>>& children);
-    void add_child(TreeNode& child);
+    void set_parent(std::weak_ptr<TreeNode> parent, uint32_t dist = 0);
+    // void set_children(std::vector<std::unique_ptr<TreeNode>>&& children);
+    void add_child(std::unique_ptr<TreeNode> child);
 
 private:
     std::string _name;
-    std::vector<std::unique_ptr<TreeNode>> _children;
-    std::unique_ptr<TreeNode> _parent;
     uint32_t _dist;
+    std::weak_ptr<TreeNode> _parent;  // parent is a shared pointer, as a node can be a parent of multiple nodes
+    std::vector<std::unique_ptr<TreeNode>> _children;   // children is a vector of unique pointers, as a node can be a child of a single parent.
 };
