@@ -30,4 +30,4 @@ $(BUILDDIR)/%.o: %.cpp $(HEADERS)
 
 .PHONY: clean
 clean:
-	rm -f $(BUILDDIR)
+	rm -rf $(BUILDDIR)/*
