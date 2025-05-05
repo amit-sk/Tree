@@ -1,18 +1,18 @@
 #include <algorithm>
 #include "TreeNode.hpp"
 
-TreeNode::TreeNode(std::string name, std::shared_ptr<TreeNode> parent, uint32_t dist) :
+TreeNode::TreeNode(std::string name, std::shared_ptr<TreeNode> parent, double dist) :
     _name(name),
     _dist(dist),
     _parent(parent)
 {}
 
-std::shared_ptr<TreeNode> TreeNode::make(std::string name, std::shared_ptr<TreeNode> parent, uint32_t dist)
+std::shared_ptr<TreeNode> TreeNode::make(std::string name, std::shared_ptr<TreeNode> parent, double dist)
 {
     return std::shared_ptr<TreeNode>(new TreeNode(name, parent, dist));
 }
 
-std::shared_ptr<TreeNode> TreeNode::make_with_children(std::string name, std::vector<std::shared_ptr<TreeNode>>&& children, std::shared_ptr<TreeNode> parent, uint32_t dist)
+std::shared_ptr<TreeNode> TreeNode::make_with_children(std::string name, std::vector<std::shared_ptr<TreeNode>>&& children, std::shared_ptr<TreeNode> parent, double dist)
 {
     std::shared_ptr<TreeNode> node = make(name, parent, dist);
     
@@ -68,13 +68,13 @@ void TreeNode::get_nodes_preorder(std::vector<std::shared_ptr<TreeNode>>& vec)
     }
 }
 
-void TreeNode::set_parent(std::weak_ptr<TreeNode> parent, uint32_t dist)
+void TreeNode::set_parent(std::weak_ptr<TreeNode> parent, double dist)
 {
     _parent = parent;
     _dist = dist;
 }
 
-void TreeNode::add_child(std::shared_ptr<TreeNode> child, uint32_t dist)
+void TreeNode::add_child(std::shared_ptr<TreeNode> child, double dist)
 {
     child->set_parent(shared_from_this(), dist);
     _children.push_back(child);
