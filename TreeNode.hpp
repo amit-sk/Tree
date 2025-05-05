@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <optional>
 
 class TreeNode : public std::enable_shared_from_this<TreeNode> 
 {
@@ -18,10 +17,13 @@ public:
     static std::shared_ptr<TreeNode> make(std::string name, std::shared_ptr<TreeNode> parent = nullptr, uint32_t dist = 0);
 
     std::string to_string() const;
+    std::string to_newick() const;
     bool is_leaf() const;
+    bool is_name_in_subnodes(std::string name) const;
+
+    void get_nodes_preorder(std::vector<std::shared_ptr<TreeNode>>& vec);
 
     void set_parent(std::weak_ptr<TreeNode> parent, uint32_t dist = 0);
-    // void set_children(std::vector<std::shared_ptr<TreeNode>>&& children);
     void add_child(std::shared_ptr<TreeNode> child, uint32_t dist = 0);
 
 private:
