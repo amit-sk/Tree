@@ -6,14 +6,20 @@ TreeNode::TreeNode(std::string name, std::shared_ptr<TreeNode> parent, uint32_t 
     _parent(parent)
 {}
 
-//make_with_children:
-std::shared_ptr<TreeNode> TreeNode::make_with_children(std::string name, std::vector<std::unique_ptr<TreeNode>>&& children, std::shared_ptr<TreeNode> parent, uint32_t dist)
+std::shared_ptr<TreeNode> TreeNode::make(std::string name, std::shared_ptr<TreeNode> parent, uint32_t dist)
 {
-    std::shared_ptr<TreeNode> node = std::make_shared<TreeNode>(name, parent, dist);
+    return std::shared_ptr<TreeNode>(new TreeNode(name, parent, dist));
+}
+
+std::shared_ptr<TreeNode> TreeNode::make_with_children(std::string name, std::vector<std::shared_ptr<TreeNode>>&& children, std::shared_ptr<TreeNode> parent, uint32_t dist)
+{
+    std::shared_ptr<TreeNode> node = make(name, parent, dist);
+    
     for (auto& child : children)
     {
         child->set_parent(node);
     }
+
     node->_children = std::move(children);
     return node;
 }
@@ -29,7 +35,8 @@ void TreeNode::set_parent(std::weak_ptr<TreeNode> parent, uint32_t dist)
     _dist = dist;
 }
 
-void TreeNode::add_child(std::unique_ptr<TreeNode> child)
+void TreeNode::add_child(std::shared_ptr<TreeNode> child, uint32_t dist)
 {
-    _children.push_back(std::move(child));
+    child->set_parent(shared_from_this(), dist);
+    _children.push_back(child);
 }
